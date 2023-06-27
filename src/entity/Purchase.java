@@ -1,29 +1,29 @@
 package entity;
 
+import java.util.Scanner;
+
 public class Purchase {
     public String purchaseName;
-    public double priceInEuro;
-    // добавить метод 'euro to cents' в Euro?
-    // так как есть пока только 'cents to euro'
+    public Euro price;
     public int purchasedUnits;
 
-    public Purchase(String purchaseName, double priceInEuro, int purchasedUnits) {
+    public Purchase(String purchaseName, Euro priceInEuro, int purchasedUnits) {
         this.purchaseName = purchaseName;
-        this.priceInEuro = priceInEuro;
+        this.price = priceInEuro;
         this.purchasedUnits = purchasedUnits;
     }
     public Purchase() {
-        this.purchaseName = "Suluguni";
-        this.priceInEuro = 2.00;
+        this.purchaseName = "Cabernet Sauvignon";
+        this.price = new Euro (150);
         this.purchasedUnits = 1;
     }
-// constructor of reading from an instance of the class Scanner.
-//    public readingFromScanner(String purchaseName, double priceInEuro, int purchasedUnits) {
-//        this.purchaseName = ;
-//        this.priceInEuro = ;
-//        this.purchasedUnits = ;
-//    }
 
+// constructor of reading from an instance of the class Scanner.
+    public Purchase(Scanner scanner){
+        purchaseName = scanner.next();
+        price = new Euro(scanner.nextInt());
+        purchasedUnits = scanner.nextInt();
+    }
 
     public String getPurchaseName() {
         return purchaseName;
@@ -33,12 +33,12 @@ public class Purchase {
         this.purchaseName = purchaseName;
     }
 
-    public double getPriceInEuro() {
-        return priceInEuro;
+    public Euro getPrice() {
+        return price;
     }
 
-    public void setPriceInEuro(double priceInEuro) {
-        this.priceInEuro = priceInEuro;
+    public void setPrice(Euro price) {
+        this.price = price;
     }
 
     public int getPurchasedUnits() {
@@ -49,22 +49,33 @@ public class Purchase {
         this.purchasedUnits = purchasedUnits;
     }
 
-//    public Euro getCost(){
-//        return
-//    }
+    public Euro getCost(){
+        return getPrice().mul(getPurchasedUnits());
+    }
 
+    public String toString(){
+        return getClass().getSimpleName() + ";" +  purchaseName + ";" + price + ";" + purchasedUnits + ";" + getCost();
+    }
 
-//    public String toString(){
-//        return
-//    }
+    protected String fieldsToString() {
+        return getClass().getSimpleName() + ";" + purchaseName + ";" + price + ";" + purchasedUnits;
+    }
 
     public boolean equals(Purchase purchase){
-        if (this.purchaseName == purchase.purchaseName &&
-                this.priceInEuro == purchase.priceInEuro){
-            return true;
-        }else{
-            return false;
+        return this.purchaseName == purchase.purchaseName &&
+                this.price == purchase.price;
+    }
+
+
+    public Purchase withMaxCost(Purchase somePurchase){
+        if(this.getCost().compareTo(somePurchase.getCost()) == 1){
+            return this;
+        }
+        else{
+            return somePurchase;
         }
     }
+
+
 
 }
